@@ -4,7 +4,7 @@ class Database
 	const DB_SERVER 	= "localhost";
 	const DB_USER 		= "root";
 	const DB_PASSWORD 	= "";
-	const DB 			= "pmt";
+	const DB 			= "pmt-rest";
 	const TABLE_PREFIX	= 'pmt_';
 
 	function __construct()
@@ -28,9 +28,11 @@ class Database
 
 	function login( $username, $password )
 	{
-		$returnArray = array();
 
-		$query 	= 'SELECT * FROM '.self::TABLE_PREFIX.'user WHERE username="'.$username.'" AND password="'.$password.'" LIMIT 0,1';
+		$hash_password 	= md5( trim( ( 'PmT-Bridge'.$password ) ) );
+		$returnArray 	= array();
+
+		$query 	= 'SELECT * FROM '.self::TABLE_PREFIX.'users WHERE login="'.$username.'" AND password="'.$hash_password.'" LIMIT 0,1';
 		$result = $this->commonDatabaseAction( $query );
 
 		if( mysql_num_rows( $result ) > 0 )

@@ -20,26 +20,29 @@
     DELETE	: Used to remove an object on the server
 */
 
-require_once("database/database.php");
 require_once("rest-api-class.php");
-
 
 class API extends RestApiClass
 {
+	var $function_name = '';
+
 	function __construct()
 	{
-		$dbObj = new Database(); /* DataBase Connection */
+		return $restApiObj	= new RestApiClass();
 	}
 
 	public function processApi()
 	{
-		$requestArray = explode('/', $_REQUEST['rquest']);
+		$restApiObj				= self::__construct();
 
-		$functionName = strtolower( trim( $requestArray[0] ) );
+		$requestArray 			= explode('/', $_REQUEST['rquest']);
 
-		if((int)method_exists($this,$functionName) > 0)
+		$this->function_name	= $restApiObj->function_name_filter( $requestArray[0] );
+
+		if((int)method_exists($this,$this->function_name ) > 0)
 		{
-			$result = $this->$functionName( $requestArray );
+			$called_function 	= $this->function_name ;
+			$result 			= $this->$called_function( $requestArray );
 
 			print_r(json_encode($result));
 		}
@@ -59,9 +62,9 @@ $api->processApi();
 /*
  * ACCESS URLs
  *
- * Login Url : http://localhost/api-client/login/username/password
+ * Login Url 		: http://localhost/api-client/login/username/password
  *
- *
+ * Get Projects Url : http://localhost/api-client/get-projects/token
  *
  *
  * */
