@@ -40,12 +40,15 @@ class RestApiClass
 
 	public function get_projects( $request_array )
 	{
+		$this->function_name	= $request_array[0];
 		$this->token			= $request_array[1];
 
-		if( __FUNCTION__ == $this->function_name_filter( $request_array[0] ) )
+		if( __FUNCTION__ == $this->function_name_filter( $this->function_name ) )
 		{
-			$dbObj = self::__construct();
-			echo 'reached!!!!';
+			$dbObj 				= self::__construct();
+			$called_function 	= $this->function_name;
+
+			return $dbObj->$called_function( $this->token );
 
 		}
 	}

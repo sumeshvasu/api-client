@@ -3,8 +3,8 @@ class Database
 {
 	const DB_SERVER 	= "localhost";
 	const DB_USER 		= "root";
-	const DB_PASSWORD 	= "root";
-	const DB 			= "PMT";
+	const DB_PASSWORD 	= "";
+	const DB 			= "pmt-rest";
 	const TABLE_PREFIX	= 'pmt_';
 
 	function __construct()
@@ -51,9 +51,10 @@ class Database
 					$tokenInsertQuery = 'INSERT INTO '.self::TABLE_PREFIX.'client_token ( user_id, token ) VALUES ("'.$row['id'].'","'.$newToken.'")';
 					$this->commonDatabaseAction( $tokenInsertQuery );
 
-					$returnArray['message']	= 'Login Success';
-					$returnArray['token'] 	= $newToken;
-					$returnArray['name'] 	= $row['name'];
+					$returnArray['message']		= 'Login Success';
+					$returnArray['token'] 		= $newToken;
+					$returnArray['name'] 		= $row['name'];
+					$returnArray['user_type'] 	= $row['status_name'];
 
 					return $returnArray;
 
@@ -62,9 +63,10 @@ class Database
 				{
 					while( $tokenRow = mysql_fetch_assoc( $tokenResult ) )
 					{
-						$returnArray['message']	= 'Login Success';
-						$returnArray['token'] 	= $tokenRow['token'];
-						$returnArray['name'] 	= $row['name'];
+						$returnArray['message']		= 'Login Success';
+						$returnArray['token'] 		= $tokenRow['token'];
+						$returnArray['name'] 		= $row['name'];
+						$returnArray['user_type'] 	= $row['status_name'];
 					}
 
 					return $returnArray;
@@ -81,12 +83,46 @@ class Database
 
 	}
 
-	function commonDatabaseAction($sql) {
+	function commonDatabaseAction($sql)
+	{
 		$result = mysql_query($sql);
 		return $result;
 	}
 
-	function generateUniqueId( $userId ){
+	function generateUniqueId( $userId )
+	{
 		return md5(uniqid( $userId , true) ) ;
 	}
+
+	function get_projects( $token )
+	{
+		$token_query = 'SELECT * FROM '.self::TABLE_PREFIX.'client_token WHERE token="'.$token.'"';
+		$tokenResult 	= $this->commonDatabaseAction( $tokenQuery );
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
