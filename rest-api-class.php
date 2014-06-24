@@ -11,13 +11,18 @@ class RestApiClass
 		return $dbObj = new Database(); /* DataBase Connection */
 
 	}
-	public function login( $request_array )
+	public function login( $request_array, $post = array() )
 	{
 		$this->function_name	= $request_array[0];
-		$this->username			= $request_array[1];
-		$this->password			= $request_array[2];
 
-		if( __FUNCTION__ == $this->function_name_filter( $this->function_name ) )
+		if( count( $post ) > 0 )
+		{
+			$this->username			= $post['username'];
+			$this->password			= $post['password'];
+		}
+
+
+		if( ( __FUNCTION__ == $this->function_name_filter( $this->function_name ) ) && ( ( $this->username != '' ) && ( $this->password != '' ) ) )
 		{
 			$dbObj 				= self::__construct();
 			$called_function 	= $this->function_name;

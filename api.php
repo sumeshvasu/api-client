@@ -1,5 +1,4 @@
 <?php
-
 /**
  * api page
  *
@@ -26,6 +25,7 @@ require_once("rest-api-class.php");
 class API extends RestApiClass {
 
     var $function_name = '';
+    var $post = array();
 
     function __construct() {
         return $restApiObj = new RestApiClass();
@@ -33,18 +33,28 @@ class API extends RestApiClass {
 
     public function processApi() {
         $restApiObj = self::__construct();
-
         $requestArray = explode('/', $_REQUEST['rquest']);
 
         $this->function_name = $restApiObj->function_name_filter($requestArray[0]);
-
         if ((int) method_exists($this, $this->function_name) > 0) {
             $called_function = $this->function_name;
             $result = $this->$called_function($requestArray);
 
-            print_r(json_encode($result));
-        } else {
-            $this->response('', 404);
+            if (isset($_POST)) {
+                $this->post = $_POST;
+            }
+
+            $this->function_name = $restApiObj->function_name_filter($requestArray[0]);
+
+            if ((int) method_exists($this, $this->function_name) > 0) {
+                $called_function = $this->function_name;
+                $result = $this->$called_function($requestArray, $this->post);
+
+
+                print_r(json_encode($result));
+            } else {
+                $this->response('', 404);
+            }
         }
     }
 
