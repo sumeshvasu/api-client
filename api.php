@@ -1,4 +1,5 @@
 <?php
+
 /**
  * api page
  *
@@ -13,44 +14,39 @@
  * @since	   June 2014
  */
 /*
- 	API		: Application Programming Interface
-	GET 	: Used for basic read requests to the server
-    PUT		: Used to modify an existing object on the server
-    POST	: Used to create a new object on the server
-    DELETE	: Used to remove an object on the server
-*/
+  API	: Application Programming Interface
+  GET 	: Used for basic read requests to the server
+  PUT	: Used to modify an existing object on the server
+  POST	: Used to create a new object on the server
+  DELETE: Used to remove an object on the server
+ */
 
 require_once("rest-api-class.php");
 
-class API extends RestApiClass
-{
-	var $function_name = '';
+class API extends RestApiClass {
 
-	function __construct()
-	{
-		return $restApiObj	= new RestApiClass();
-	}
+    var $function_name = '';
 
-	public function processApi()
-	{
-		$restApiObj				= self::__construct();
+    function __construct() {
+        return $restApiObj = new RestApiClass();
+    }
 
-		$requestArray 			= explode('/', $_REQUEST['rquest']);
+    public function processApi() {
+        $restApiObj = self::__construct();
 
-		$this->function_name	= $restApiObj->function_name_filter( $requestArray[0] );
+        $requestArray = explode('/', $_REQUEST['rquest']);
 
-		if((int)method_exists($this,$this->function_name ) > 0)
-		{
-			$called_function 	= $this->function_name ;
-			$result 			= $this->$called_function( $requestArray );
+        $this->function_name = $restApiObj->function_name_filter($requestArray[0]);
 
-			print_r(json_encode($result));
-		}
-		else
-		{
-			$this->response('',404);
-		}
-	}
+        if ((int) method_exists($this, $this->function_name) > 0) {
+            $called_function = $this->function_name;
+            $result = $this->$called_function($requestArray);
+
+            print_r(json_encode($result));
+        } else {
+            $this->response('', 404);
+        }
+    }
 
 }
 
@@ -62,7 +58,7 @@ $api->processApi();
 /*
  * ACCESS URLs
  *
- * Login Url 		: http://localhost/api-client/login/username/password
+ * Login Url        : http://localhost/api-client/login/username/password
  *
  * Get Projects Url : http://localhost/api-client/get-projects/token
  *

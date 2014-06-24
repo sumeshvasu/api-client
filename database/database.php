@@ -3,8 +3,8 @@ class Database
 {
 	const DB_SERVER 	= "localhost";
 	const DB_USER 		= "root";
-	const DB_PASSWORD 	= "";
-	const DB 			= "pmt-rest";
+	const DB_PASSWORD 	= "root";
+	const DB 			= "PMT";
 	const TABLE_PREFIX	= 'pmt_';
 
 	function __construct()
